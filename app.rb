@@ -91,7 +91,7 @@ class KeyboardHandler
     if key == 0 || key == 224
       key2 = Console._getch()
       key_symbol = SPECIAL_KEYS[key2]
-      puts "Специальная клавиша: #{key_symbol} (код: #{key2})" if key_symbol
+     # puts "Специальная клавиша: #{key_symbol} (код: #{key2})" if key_symbol
     else
       # Обработка обычных клавиш
       char = key.chr
@@ -100,9 +100,9 @@ class KeyboardHandler
       if LETTER_KEYS[char]
        # puts "Буквенная клавиша: #{key_symbol}"
       elsif SPECIAL_KEYS[key]
-        puts "Специальная клавиша: #{key_symbol}"
+        #puts "Специальная клавиша: #{key_symbol}"
       else
-        puts "Другая клавиша: #{char.inspect} (код: #{key})"
+       # puts "Другая клавиша: #{char.inspect} (код: #{key})"
       end
     end
 
@@ -113,12 +113,42 @@ class KeyboardHandler
   end
 end
 
+class DrawingCalculator
+
+  def draw
+    calculator = Array.new(8)
+    calculator[0] = ["┌"] + (["─"] * 15) + ["┐"]
+    calculator[1] = ["|"] + ([" "] * 15) + ["|"]  
+    calculator[2] = ["|"] + (["─"] * 15) + ["|"]
+       # ───────────────┐",
+      # "│                │",
+      # "├────────────────┤",
+      # "│ 7   8   9   +  │",
+      # "│ 4   5   6   -  │",
+      # "│ 1   2   3   *  │",
+      # "│ 0   .   =   /  │",
+      # "└────────────────┘"
+      #     ]
+      calculator
+  end
+
+end #end class
+
 loop do
   # Создаем обработчик
   keyboard = KeyboardHandler.new
 
+  draw = DrawingCalculator.new
+
   # Регистрируем обработчики для клавиш
-  keyboard.on(:up) { puts "↑ Перемещение вверх" }
+  keyboard.on(:up) do 
+    draw.draw.each do |i| 
+      i.each do |y|
+        print y
+      end 
+      puts
+    end
+  end
 
   # Запускаем обработчик
   keyboard.start
