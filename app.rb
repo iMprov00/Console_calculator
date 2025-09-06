@@ -138,7 +138,12 @@ class DrawingCalculator
       calculator
   end
 
+  def cursor
+    "@"
+  end
+
 end #end class
+
 
 loop do
   # Создаем обработчик
