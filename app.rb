@@ -117,7 +117,7 @@ end
 class DrawingCalculator
   attr_reader :calculator
 
-  def draw
+  def draw_calculator
     calculator = Array.new(8)
     calculator[0] = ["┌"] + (["─"] * 15) + ["┐"]
     calculator[1] = ["│"] + ([" "] * 15) + ["│"]  
@@ -140,8 +140,8 @@ class DrawingCalculator
       @calculator = calculator
   end
 
-  def cursor
-    "@"
+  def cursor(value)
+    value.on_white.black
   end
 
 end #end class
@@ -153,7 +153,6 @@ class CursorNavigator
     @x = 2
     @y = 5
   end
-
 
 
 end #end class
@@ -178,12 +177,12 @@ loop do
     puts "x: #{cursor.x}"
     puts
 
-    arr = draw.draw
+    arr = draw.draw_calculator
 
     arr.each_with_index do |v1, i1| 
       arr[i1].each_with_index do |v2, i2|
         if cursor.y == i1 && cursor.x == i2
-          print v2.on_white.black
+          print draw.cursor(v2)
         else
           print v2
         end #end if
