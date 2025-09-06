@@ -115,6 +115,10 @@ end
 
 class DrawingCalculator
 
+  def initialize
+    @calculator
+  end
+
   def draw
     calculator = Array.new(8)
     calculator[0] = ["┌"] + (["─"] * 15) + ["┐"]
@@ -135,7 +139,7 @@ class DrawingCalculator
       # "│ 0   .   =   /  │",
       # "└────────────────┘"
 
-      calculator
+      @calculator = calculator
   end
 
   def cursor
@@ -143,6 +147,7 @@ class DrawingCalculator
   end
 
 end #end class
+
 
 
 loop do
@@ -153,7 +158,7 @@ loop do
 
   # Регистрируем обработчики для клавиш
   keyboard.on(:up) do 
-    draw.draw.each do |i| 
+    draw.calculator.each do |i| 
       i.each do |y|
         print y
       end 
