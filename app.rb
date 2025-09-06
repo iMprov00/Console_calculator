@@ -114,10 +114,7 @@ class KeyboardHandler
 end
 
 class DrawingCalculator
-
-  def initialize
-    @calculator
-  end
+  attr_reader :calculator
 
   def draw
     calculator = Array.new(8)
@@ -148,7 +145,16 @@ class DrawingCalculator
 
 end #end class
 
+class CursorNavigator
 
+  def initialize
+    @x = 2
+    @y = 5
+  end
+
+
+
+end #end class
 
 loop do
   # Создаем обработчик
@@ -157,8 +163,8 @@ loop do
   draw = DrawingCalculator.new
 
   # Регистрируем обработчики для клавиш
-  keyboard.on(:up) do 
-    draw.calculator.each do |i| 
+  keyboard.on(:a) do 
+    draw.draw.each do |i| 
       i.each do |y|
         print y
       end 
