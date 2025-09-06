@@ -1,5 +1,6 @@
 require 'fiddle'
 require 'fiddle/import'
+require 'colorize'
 
 class KeyboardHandler
   # Импортируем функции из msvcrt.dll
@@ -146,6 +147,7 @@ class DrawingCalculator
 end #end class
 
 class CursorNavigator
+  attr_accessor :y, :x
 
   def initialize
     @x = 2
@@ -162,11 +164,29 @@ loop do
 
   draw = DrawingCalculator.new
 
+  cursor = CursorNavigator.new
+
+  keyboard.on(:up) {cursor.y -= 1}
+  keyboard.on(:down) {print "aaaaaaa"}
+  keyboard.on(:left)
+  keyboard.on(:right)
+
   # Регистрируем обработчики для клавиш
   keyboard.on(:a) do 
-    draw.draw.each do |i| 
-      i.each do |y|
-        print y
+
+    puts "y: #{cursor.y}"
+    puts "x: #{cursor.x}"
+    puts
+
+    arr = draw.draw
+
+    arr.each_with_index do |v1, i1| 
+      arr[i1].each_with_index do |v2, i2|
+        if cursor.y == i1 && cursor.x == i2
+          print v2.on_white.black
+        else
+          print v2
+        end #end if
       end 
       puts
     end
