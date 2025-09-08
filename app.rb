@@ -232,52 +232,91 @@ end #end class
   # Создаем обработчик
   keyboard = KeyboardHandler.new
 
-  draw = DrawingCalculator.new
+  @draw = DrawingCalculator.new
 
   border = BorderLimit.new
 
-  empty = EmptyElement.new(draw)
+  empty = EmptyElement.new(@draw)
 
-  cursor = CursorNavigator.new(border, empty)
+  @cursor = CursorNavigator.new(border, empty)
 
 
 
 loop do
 
 
-
-
-
-  keyboard.on(:up) {cursor.move_up}
-  keyboard.on(:down) {cursor.move_down}
-  keyboard.on(:left) {cursor.move_left}
-  keyboard.on(:right) {cursor.move_right}
-  keyboard.on(:enter) {draw.result(cursor.y, cursor.x)}
-  keyboard.on(:c) {draw.clear}
-
-  # Регистрируем обработчики для клавиш
-  keyboard.on(:a) do 
-
-
-    puts "y: #{cursor.y}"
-    puts "x: #{cursor.x}"
-    puts
-
-
-    arr = draw.calculator
+  def test_
+    puts "\e[H\e[2J"
+    arr = @draw.calculator
 
     arr.each_with_index do |v1, i1| 
       arr[i1].each_with_index do |v2, i2|
-        if cursor.y == i1 && cursor.x == i2
+        if @cursor.y == i1 && @cursor.x == i2
 
-          print draw.cursor(v2)
+          print @draw.cursor(v2)
         else
           print v2
         end #end if
       end 
       puts
     end
+
   end
+
+
+  keyboard.on(:up) do 
+    @cursor.move_up 
+    test_ 
+  end
+
+  keyboard.on(:down) do 
+    @cursor.move_down
+    test_ 
+  end
+
+  keyboard.on(:left) do 
+    @cursor.move_left
+    test_ 
+  end
+
+  keyboard.on(:right) do
+    @cursor.move_right
+    test_ 
+  end
+
+  keyboard.on(:enter) do 
+    @draw.result(@cursor.y, @cursor.x)
+    test_ 
+  end
+
+  keyboard.on(:c) do 
+    @draw.clear
+    test_ 
+  end
+
+  # # Регистрируем обработчики для клавиш
+  # keyboard.on(:a) do 
+
+
+  #   puts "y: #{cursor.y}"
+  #   puts "x: #{cursor.x}"
+  #   puts
+
+
+  #   arr = draw.calculator
+
+  #   arr.each_with_index do |v1, i1| 
+  #     arr[i1].each_with_index do |v2, i2|
+  #       if cursor.y == i1 && cursor.x == i2
+
+  #         print draw.cursor(v2)
+  #       else
+  #         print v2
+  #       end #end if
+  #     end 
+  #     puts
+  #   end
+  # end
 
   # Запускаем обработчик
   keyboard.start
