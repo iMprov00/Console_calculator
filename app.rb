@@ -146,42 +146,113 @@ class DrawingCalculator
 
 end #end class
 
+class BorderLimit
+  attr_reader :max_x, :max_y, :min_x, :min_y
+
+  def initialize
+    @max_y = 6
+    @min_y = 3
+
+    @max_x = 14
+    @min_x = 2
+  end
+
+end
+
+class EmptyElement
+
+  def initialize(calculator)
+    @calculator = calculator
+  end
+
+  def element?(y, x)
+    @calculator.calculator[y][x] == " " ? true : false
+  end
+
+end
+
 class CursorNavigator
   attr_accessor :y, :x
 
-  def initialize
+  def initialize(border, empty)
     @x = 2
     @y = 5
+    @border = border
+    @empty = empty
+  end
+
+  def move_up
+    @y = [@y - 1, @border.min_y].max
+  end
+
+  def move_down
+    @y = [@y + 1, @border.max_y].min
+  end
+
+  def move_left  
+    if (@x - 1) < @border.min_x
+      @x = @border.min_x
+    else
+      @x -= 1
+      loop do 
+        @empty.element?(@y, @x) == true ? @x = [@x - 1, @border.min_x].max : break
+      end
+    end
+  end
+
+  def move_right
+    if (@x + 1) > @border.max_x
+      @x = @border.max_x
+    else
+      @x += 1
+      loop do 
+        @empty.element?(@y, @x) == true ? @x = [@x + 1, @border.min_x].max : break
+      end
+    end
   end
 
 
 end #end class
 
-loop do
   # Создаем обработчик
   keyboard = KeyboardHandler.new
 
   draw = DrawingCalculator.new
 
-  cursor = CursorNavigator.new
+  border = BorderLimit.new
 
-  keyboard.on(:up) {cursor.y -= 1}
-  keyboard.on(:down) {print "aaaaaaa"}
-  keyboard.on(:left)
-  keyboard.on(:right)
+  empty = EmptyElement.new(draw)
+
+  cursor = CursorNavigator.new(border, empty)
+
+
+
+loop do
+
+
+
+
+
+  keyboard.on(:up) {cursor.move_up}
+  keyboard.on(:down) {cursor.move_down}
+  keyboard.on(:left) {cursor.move_left}
+  keyboard.on(:right) {cursor.move_right}
 
   # Регистрируем обработчики для клавиш
   keyboard.on(:a) do 
 
+
     puts "y: #{cursor.y}"
     puts "x: #{cursor.x}"
     puts
+
 
     arr = draw.draw_calculator
 
     arr.each_with_index do |v1, i1| 
       arr[i1].each_with_index do |v2, i2|
         if cursor.y == i1 && cursor.x == i2
+
           print draw.cursor(v2)
         else
           print v2
