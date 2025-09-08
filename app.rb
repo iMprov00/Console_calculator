@@ -117,6 +117,12 @@ end
 class DrawingCalculator
   attr_reader :calculator
 
+  def initialize
+    draw_calculator
+    @x = 2
+  end
+
+
   def draw_calculator
     calculator = Array.new(8)
     calculator[0] = ["┌"] + (["─"] * 15) + ["┐"]
@@ -142,6 +148,15 @@ class DrawingCalculator
 
   def cursor(value)
     value.on_white.black
+  end
+
+  def result(y, x)
+    @calculator[1][@x] = @calculator[y][x]
+    @x += 1
+  end
+
+  def clear
+    @calculator[1] = ["│"] + ([" "] * 15) + ["│"] 
   end
 
 end #end class
@@ -237,6 +252,8 @@ loop do
   keyboard.on(:down) {cursor.move_down}
   keyboard.on(:left) {cursor.move_left}
   keyboard.on(:right) {cursor.move_right}
+  keyboard.on(:enter) {draw.result(cursor.y, cursor.x)}
+  keyboard.on(:c) {draw.clear}
 
   # Регистрируем обработчики для клавиш
   keyboard.on(:a) do 
@@ -247,7 +264,7 @@ loop do
     puts
 
 
-    arr = draw.draw_calculator
+    arr = draw.calculator
 
     arr.each_with_index do |v1, i1| 
       arr[i1].each_with_index do |v2, i2|
