@@ -114,12 +114,21 @@ class KeyboardHandler
   end
 end
 
+
+
+
 class DrawingCalculator
-  attr_reader :calculator
+  attr_reader :calculator, :result
 
   def initialize
+
     draw_calculator
+
     @x = 2
+
+    @result = ""
+
+    @sum = ""
   end
 
 
@@ -151,12 +160,23 @@ class DrawingCalculator
   end
 
   def result(y, x)
-    @calculator[1][@x] = @calculator[y][x]
-    @x += 1
+    if @calculator[y][x] == "="
+      
+      clear
+      @sum = eval(@sum)
+      @calculator[1][@x] = @sum
+      @sum = ""
+    else 
+      @calculator[1][@x] = @calculator[y][x]
+      @sum += @calculator[y][x]
+      @x += 1
+    end
   end
 
   def clear
     @calculator[1] = ["│"] + ([" "] * 15) + ["│"] 
+    @x = 2
+    @result = ""
   end
 
 end #end class
@@ -294,29 +314,6 @@ loop do
     test_ 
   end
 
-  # # Регистрируем обработчики для клавиш
-  # keyboard.on(:a) do 
-
-
-  #   puts "y: #{cursor.y}"
-  #   puts "x: #{cursor.x}"
-  #   puts
-
-
-  #   arr = draw.calculator
-
-  #   arr.each_with_index do |v1, i1| 
-  #     arr[i1].each_with_index do |v2, i2|
-  #       if cursor.y == i1 && cursor.x == i2
-
-  #         print draw.cursor(v2)
-  #       else
-  #         print v2
-  #       end #end if
-  #     end 
-  #     puts
-  #   end
-  # end
 
   # Запускаем обработчик
   keyboard.start
